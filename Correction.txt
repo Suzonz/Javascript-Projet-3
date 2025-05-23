@@ -1,0 +1,112 @@
+```js
+const prompt = require("prompt-sync")()
+
+const player = {
+    name: "Thomas",
+    pv: 100,
+    atks: [
+        {
+            name: 'HTML',
+            damage: -10,
+            accuracy: 1
+        },
+        {
+            name: 'Bierre',
+            damage: 15,
+            accuracy: 2
+        },
+        {
+            name: 'CSS',
+            damage: -20,
+            accuracy: 2
+        },
+        {
+            name: 'Algo',
+            damage: -30,
+            accuracy: 3
+        }
+    ]
+}
+
+const mu = {
+    name: "Promo mu",
+    pv: 100,
+    atks: [
+        {
+            name: 'Florian se la pete',
+            damage: -10,
+            accuracy: 1
+        },
+        {
+            name: "C'est relache",
+            damage: 15,
+            accuracy: 2
+        },
+        {
+            name: "Manon arrive a l'heure",
+            damage: -20,
+            accuracy: 2
+        },
+        {
+            name: 'Quentin pose une question',
+            damage: -90,
+            accuracy: 3
+        }
+    ]
+}
+
+function choiceAttack() {
+    for (let i = 0; i < player.atks.length; i++) {
+        console.log(i + 1 + ") " + player.atks[i].name);
+    }
+    let choice = Number(prompt("entre ton choix"))
+    while (choice < 1 || choice > 4 || isNaN(choice)) {
+        choice = Number(prompt("tu t'es trompé, entre ton choix entre 1 et 4"))
+    }
+    return player.atks[choice - 1]
+}
+
+function attack(atk, opponnent, attacker) {
+    if (random(0, atk.accuracy) == atk.accuracy) {
+        console.log("attaque a reusis");
+        if (atk.damage < 0) {
+            console.log(atk.name + " a infligé " + atk.damage + " a " + opponnent.name);
+            opponnent.pv += atk.damage
+        } else {
+            console.log(atk.name + " vous a soigné");
+            attacker.pv += atk.damage
+        }
+    } else {
+        console.log("attaque a echoue");
+
+    }
+}
+
+function random(min, max) {
+    return Math.round(Math.random() * (max - min)) + min;
+}
+
+function displayStatus() {
+    console.log(player.name + " a " + player.pv + " pv");
+    console.log(mu.name + " a " + mu.pv + " pv");
+}
+
+console.log("Bienvenu ! battez vous !");
+while (player.pv > 0 && mu.pv > 0) {
+    displayStatus()
+    attack(choiceAttack(), mu, player)
+    if (mu.pv <= 0) {
+       break 
+    }
+    console.log(mu.name + ' attaque');
+    attack(mu.atks[random(0,mu.atks.length - 1)],player,mu)
+
+}
+
+if (player.pv > 0) {
+    console.log(player.name + " a gagner");
+ 
+}else{
+    console.log(mu.name + " a gagner");
+}
+```
